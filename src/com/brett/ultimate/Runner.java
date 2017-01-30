@@ -1,5 +1,7 @@
 package com.brett.ultimate;
 
+import com.sun.tools.classfile.ConstantPool;
+
 import java.util.Scanner;
 
 /**
@@ -14,6 +16,7 @@ public class Runner {
 	int oCounter = 3;
 	int xSwap = 1;
 	int oSwap = 1;
+	String choice = "";
 
 	BigBoard bigBoard;
 	public static void main(String[] args) throws Exception {
@@ -42,27 +45,50 @@ public class Runner {
 				}
 				System.out.println("What would you like to do?");
 				System.out.println("\"move\", \"erase\", or \"swap\"?");
-				String choice = inputScanner.nextLine();
-				switch (choice) {
-					case "move":
+				boolean flag = true;
+
+				while(flag) {
+					choice = inputScanner.nextLine();
+
+					if (choice.equalsIgnoreCase("move")) {
 						move(currentPlayer);
-						break;
-					case "erase":
+						flag = false;
+					} else if (choice.equalsIgnoreCase("erase")) {
 						if ((currentPlayer == CellContents.X && xCounter != 0)
 								|| (currentPlayer == CellContents.O && oCounter != 0)) {
 							eraseContents();
+							flag = false;
 						}
-						break;
-					case "swap":
+					} else if (choice.equalsIgnoreCase("swap")) {
 						if ((currentPlayer == CellContents.X && xSwap != 0)
 								|| (currentPlayer == CellContents.O && oSwap != 0)) {
 							swap(myBoard);
+							flag = false;
 						}
-						break;
-					default:
-						throw new Exception();
-
+					} else {
+						System.out.println("Please type either \"move\", \"erase\", or \"swap\".");
+					}
 				}
+//				switch (choice) {
+//					case "move":
+//						move(currentPlayer);
+//						break;
+//					case "erase":
+//						if ((currentPlayer == CellContents.X && xCounter != 0)
+//								|| (currentPlayer == CellContents.O && oCounter != 0)) {
+//							eraseContents();
+//						}
+//						break;
+//					case "swap":
+//						if ((currentPlayer == CellContents.X && xSwap != 0)
+//								|| (currentPlayer == CellContents.O && oSwap != 0)) {
+//							swap(myBoard);
+//						}
+//						break;
+//					default:
+////						throw new ;
+//
+//				}
 
 				if (currentPlayer == CellContents.X) {
 					currentPlayer = CellContents.O;
