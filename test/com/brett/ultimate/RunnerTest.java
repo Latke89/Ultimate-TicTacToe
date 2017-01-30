@@ -99,5 +99,5 @@ public class RunnerTest {
 		assertEquals(false, myBoard.isWin(current.X));
 		assertEquals(true, myBoard.isWin(current.O));
 	}
-	
+
 }

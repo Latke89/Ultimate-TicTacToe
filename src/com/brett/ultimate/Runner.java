@@ -16,73 +16,76 @@ public class Runner {
 	int oSwap = 1;
 
 	BigBoard bigBoard;
-	public static void main(String[] args) {
+	public static void main(String[] args) throws Exception {
 
 		Runner myRunner = new Runner();
 		myRunner.tictactoe();
 //		myRunner.bigBoard();
 	}
 
-	public void tictactoe() {
+	public void tictactoe() throws Exception {
 		myBoard = new Board();
 		currentPlayer = CellContents.X;
 		state = GameState.PLAYING;
 
 		myBoard.initializeBoard();
 
-		while(state == GameState.PLAYING) {
-			myBoard.drawBoard();
-			System.out.println("Current player: " + currentPlayer);
-			if(currentPlayer == CellContents.X){
-				System.out.println("Erases remaining: " + xCounter + ", Swaps remaining: " + xSwap);
-			} else {
-				System.out.println("Erases remaining: " + oCounter + ", Swaps remaining: " + oSwap);
-			}
-			System.out.println("What would you like to do?");
-			System.out.println("\"move\", \"erase\", or \"swap\"?");
-			String choice = inputScanner.nextLine();
-			switch(choice) {
-				case "move":
-					move(currentPlayer);
-					break;
-				case "erase":
-					if((currentPlayer == CellContents.X && xCounter != 0)
-							|| (currentPlayer == CellContents.O && oCounter != 0)) {
-						eraseContents();
-					}
-					break;
-				case "swap":
-					if((currentPlayer == CellContents.X && xSwap !=0)
-							|| (currentPlayer == CellContents.O && oSwap != 0)) {
-						swap(myBoard);
-					}
-					break;
-			}
-//			if(choice.equalsIgnoreCase("move")) {
-//				move(currentPlayer);
-//			} else if(choice.equalsIgnoreCase("erase")) {
-//				eraseContents();
-//			} else if(choice.equalsIgnoreCase("swap")) {
-//				swap(myBoard);
-//			}
 
-//			move(currentPlayer);
+		while (state == GameState.PLAYING) {
+			try {
+				myBoard.drawBoard();
+				System.out.println("Current player: " + currentPlayer);
+				if (currentPlayer == CellContents.X) {
+					System.out.println("Erases remaining: " + xCounter + ", Swaps remaining: " + xSwap);
+				} else {
+					System.out.println("Erases remaining: " + oCounter + ", Swaps remaining: " + oSwap);
+				}
+				System.out.println("What would you like to do?");
+				System.out.println("\"move\", \"erase\", or \"swap\"?");
+				String choice = inputScanner.nextLine();
+				switch (choice) {
+					case "move":
+						move(currentPlayer);
+						break;
+					case "erase":
+						if ((currentPlayer == CellContents.X && xCounter != 0)
+								|| (currentPlayer == CellContents.O && oCounter != 0)) {
+							eraseContents();
+						}
+						break;
+					case "swap":
+						if ((currentPlayer == CellContents.X && xSwap != 0)
+								|| (currentPlayer == CellContents.O && oSwap != 0)) {
+							swap(myBoard);
+						}
+						break;
+					default:
+						throw new Exception();
 
-			if(currentPlayer == CellContents.X) {
-				currentPlayer = CellContents.O;
-			} else {
-				currentPlayer = CellContents.X;
+				}
+
+				if (currentPlayer == CellContents.X) {
+					currentPlayer = CellContents.O;
+				} else {
+					currentPlayer = CellContents.X;
+				}
+			} catch (ArrayIndexOutOfBoundsException arrEx){
+//				arrEx.printStackTrace();
+				System.out.println("Please choose a number between 1 and 3.");
+			} catch (NumberFormatException numEx) {
+//				numEx.printStackTrace();
+				System.out.println("Please choose a number.");
 			}
+
 		}
-
 
 	}
 
 	public void move(CellContents current) {
 		if (current == CellContents.X) {
-			System.out.println("Choose where to place your \"X\" (col[1-3], row[1-3]");
+			System.out.println("Choose where to place your \"X\" (col[1-3], row[1-3])");
 		} else {
-			System.out.println("Choose where to place your \"O\" (col[1-3], row[1-3]");
+			System.out.println("Choose where to place your \"O\" (col[1-3], row[1-3])");
 		}
 		System.out.print("> ");
 		int col = Integer.valueOf(inputScanner.nextLine()) - 1;
