@@ -5,6 +5,7 @@ package com.brett.ultimate;
  */
 public class BigCell {
 	CellContents contents;
+	Board board;
 	int row;
 	int column;
 	String drawContents = "";
@@ -12,6 +13,8 @@ public class BigCell {
 	public BigCell(int row, int column) {
 		this.row = row;
 		this.column = column;
+		board = new Board();
+		board.initializeBoard();
 	}
 
 	public void clear() {

@@ -6,6 +6,7 @@ package com.brett.ultimate;
 public class Board {
 	public static final int ROWS = 3;
 	public static final int COLS = 3;
+	GameState state;
 
 	Cell[][] cells;
 	int currentRow;
@@ -25,6 +26,7 @@ public class Board {
 		for (int row = 0; row < ROWS; row++) {
 			for (int col = 0; col < COLS; col++) {
 				cells[row][col].clear();
+				state = GameState.PLAYING;
 			}
 		}
 	}

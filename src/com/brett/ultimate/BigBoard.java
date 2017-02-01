@@ -36,6 +36,7 @@ public class BigBoard {
 					System.out.print("|");
 				}
 			}
+			System.out.println();
 			if(row < ROWS - 1) {
 				System.out.println("-------------");
 			}

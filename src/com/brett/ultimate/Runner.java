@@ -35,7 +35,7 @@ public class Runner {
 		myBoard.initializeBoard();
 
 
-		while (state == GameState.PLAYING) {
+		while (myBoard.state == GameState.PLAYING) {
 			try {
 				myBoard.drawBoard();
 				System.out.println("Current player: " + currentPlayer);
@@ -177,15 +177,15 @@ public class Runner {
 
 	public void checkBoardState(CellContents current){
 		if(myBoard.isDraw()){
-			state = GameState.DRAW;
+			myBoard.state = GameState.DRAW;
 		} else if(myBoard.isWin(current)) {
 			if (current == CellContents.X) {
 				myBoard.drawBoard();
-				state = GameState.X_WIN;
+				myBoard.state = GameState.X_WIN;
 				System.out.println("Congratulations, X's win!");
 			} else {
 				myBoard.drawBoard();
-				state = GameState.O_WIN;
+				myBoard.state = GameState.O_WIN;
 				System.out.println("Congratulations, O's win!");
 			}
 		}

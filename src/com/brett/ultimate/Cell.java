@@ -10,8 +10,6 @@ public class Cell {
 	int column;
 	String drawContents = "";
 
-	public Cell() {
-	}
 
 	public Cell(int row, int column) {
 		this.row = row;
