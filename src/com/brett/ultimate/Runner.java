@@ -16,7 +16,7 @@ public class Runner {
 	private int oCounter = 3;
 	private int xSwap = 1;
 	private int oSwap = 1;
-	int swapCooldown;
+	int swapCooldown = 0;
 	private String choice = "";
 
 	BigBoard bigBoard;
@@ -44,6 +44,10 @@ public class Runner {
 				} else {
 					System.out.println("Erases remaining: " + oCounter + ", Swaps remaining: " + oSwap);
 				}
+				if(swapCooldown > 0) {
+					System.out.println("Swap ready in " + swapCooldown + " turn");
+				}
+
 				System.out.println("What would you like to do?");
 				System.out.println("\"move\", \"erase\", or \"swap\"?");
 				boolean flag = true;
@@ -66,12 +70,19 @@ public class Runner {
 
 					} else if (choice.equalsIgnoreCase("swap")) {
 
-						if ((currentPlayer == CellContents.X && xSwap > 0)
-								|| (currentPlayer == CellContents.O && oSwap > 0)) {
+						if (((currentPlayer == CellContents.X && xSwap > 0)
+								|| (currentPlayer == CellContents.O && oSwap > 0))
+								&& swapCooldown == 0) {
 							swap(myBoard);
+							swapCooldown = 2;
 							flag = false;
 						} else {
-							System.out.println("You are not able to swap tiles anymore.");
+							if (swapCooldown > 0) {
+								System.out.println("You need to wait for the skill to cool down!");
+							} else {
+								System.out.println("You are not able to swap tiles anymore.");
+
+							}
 						}
 
 					} else {
@@ -84,6 +95,9 @@ public class Runner {
 					currentPlayer = CellContents.O;
 				} else {
 					currentPlayer = CellContents.X;
+				}
+				if(swapCooldown > 0) {
+					swapCooldown--;
 				}
 
 			} catch (ArrayIndexOutOfBoundsException arrEx){
