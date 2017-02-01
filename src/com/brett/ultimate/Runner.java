@@ -8,14 +8,15 @@ import java.util.Scanner;
  * Created by Brett on 1/26/17.
  */
 public class Runner {
-	private Board myBoard;
+	Board myBoard;
 	private CellContents currentPlayer;
-	private GameState state;
+	GameState state;
 	private Scanner inputScanner = new Scanner(System.in);
 	private int xCounter = 3;
 	private int oCounter = 3;
 	private int xSwap = 1;
 	private int oSwap = 1;
+	int swapCooldown;
 	private String choice = "";
 
 	BigBoard bigBoard;
@@ -54,6 +55,7 @@ public class Runner {
 						move(currentPlayer);
 						flag = false;
 					} else if (choice.equalsIgnoreCase("erase")) {
+
 						if ((currentPlayer == CellContents.X && xCounter != 0)
 								|| (currentPlayer == CellContents.O && oCounter != 0)) {
 								eraseContents();
@@ -61,7 +63,9 @@ public class Runner {
 						} else {
 							System.out.println("You are not able to erase any more tiles.");
 						}
+
 					} else if (choice.equalsIgnoreCase("swap")) {
+
 						if ((currentPlayer == CellContents.X && xSwap > 0)
 								|| (currentPlayer == CellContents.O && oSwap > 0)) {
 							swap(myBoard);
@@ -69,9 +73,11 @@ public class Runner {
 						} else {
 							System.out.println("You are not able to swap tiles anymore.");
 						}
+
 					} else {
 						System.out.println("Please type either \"move\", \"erase\", or \"swap\".");
 					}
+
 				}
 
 				if (currentPlayer == CellContents.X) {
@@ -79,6 +85,7 @@ public class Runner {
 				} else {
 					currentPlayer = CellContents.X;
 				}
+
 			} catch (ArrayIndexOutOfBoundsException arrEx){
 //				arrEx.printStackTrace();
 				System.out.println("Please choose a number between 1 and 3.");
@@ -93,16 +100,20 @@ public class Runner {
 
 	public void move(CellContents current) {
 		boolean flag = true;
+
 		while(flag) {
+
 			if (current == CellContents.X) {
 				System.out.println("Choose where to place your \"X\" (col[1-3], row[1-3])");
 			} else {
 				System.out.println("Choose where to place your \"O\" (col[1-3], row[1-3])");
 			}
+
 			System.out.print("> ");
 			int col = Integer.valueOf(inputScanner.nextLine()) - 1;
 			System.out.print("> ");
 			int row = Integer.valueOf(inputScanner.nextLine()) - 1;
+
 //		System.out.println(col + ", " + row);
 
 			if (myBoard.cells[row][col].contents == CellContents.EMPTY) {
@@ -121,7 +132,9 @@ public class Runner {
 
 		System.out.println("What square would you like to erase? (col[1-3], row[1-3]");
 		boolean flag = true;
+
 		while(flag) {
+
 			System.out.print("> ");
 			int col = Integer.valueOf(inputScanner.nextLine()) - 1;
 			System.out.print("> ");
@@ -132,6 +145,7 @@ public class Runner {
 			} else {
 				oCounter--;
 			}
+
 			if (myBoard.cells[row][col].contents != CellContents.EMPTY && myBoard.cells[row][col].contents != currentPlayer) {
 				myBoard.cells[row][col].clear();
 				flag = false;
@@ -145,6 +159,7 @@ public class Runner {
 	public void swap(Board board) {
 		for (int row = 0; row < board.cells.length; row++) {
 			for (int col = 0; col < board.cells.length; col++) {
+
 				if(board.cells[row][col].contents == currentPlayer.X) {
 					board.cells[row][col].contents = currentPlayer.O;
 				} else if (board.cells[row][col].contents == currentPlayer.O) {

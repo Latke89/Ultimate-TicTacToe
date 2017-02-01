@@ -37,7 +37,18 @@ public class RunnerTest {
 	@Test
 	public void drawCell() throws Exception {
 		cell.contents = current.X;
-//		assertEquals(" X ", cell.draw());
+		cell.draw();
+		assertEquals(" X ", cell.drawContents);
+		cell.clear();
+
+		cell.contents = CellContents.O;
+		cell.draw();
+		assertEquals(" O ", cell.drawContents);
+		cell.clear();
+
+		cell.contents = CellContents.EMPTY;
+		cell.draw();
+		assertEquals("   ", cell.drawContents);
 	}
 
 	@Test
@@ -98,6 +109,54 @@ public class RunnerTest {
 		myBoard.cells[0][2].contents = current.O;
 		assertEquals(false, myBoard.isWin(current.X));
 		assertEquals(true, myBoard.isWin(current.O));
+	}
+
+	@Test
+	public void boardState() throws Exception {
+		myRunner.myBoard = new Board();
+		myRunner.myBoard.cells[0][0].contents = CellContents.X;
+		myRunner.myBoard.cells[0][1].contents = CellContents.O;
+		myRunner.myBoard.cells[0][2].contents = CellContents.X;
+		myRunner.myBoard.cells[1][0].contents = CellContents.O;
+		myRunner.myBoard.cells[1][1].contents = CellContents.O;
+		myRunner.myBoard.cells[1][2].contents = CellContents.X;
+		myRunner.myBoard.cells[2][0].contents = CellContents.X;
+		myRunner.myBoard.cells[2][1].contents = CellContents.X;
+		myRunner.myBoard.cells[2][2].contents = CellContents.O;
+
+		myRunner.checkBoardState(CellContents.O);
+		assertEquals(GameState.DRAW, myRunner.state);
+
+		myRunner.myBoard.initializeBoard();
+		myRunner.myBoard.cells[0][0].contents = CellContents.X;
+		myRunner.myBoard.cells[0][1].contents = CellContents.X;
+		myRunner.myBoard.cells[0][2].contents = CellContents.X;
+		myRunner.checkBoardState(CellContents.X);
+		assertEquals(GameState.X_WIN, myRunner.state);
+
+		myRunner.myBoard.initializeBoard();
+		myRunner.myBoard.cells[0][2].contents = CellContents.O;
+		myRunner.myBoard.cells[1][1].contents = CellContents.O;
+		myRunner.myBoard.cells[2][0].contents = CellContents.O;
+		myRunner.checkBoardState(CellContents.O);
+		assertEquals(GameState.O_WIN, myRunner.state);
+	}
+
+	@Test
+	public void swap() throws Exception {
+		myRunner.myBoard = new Board();
+		myRunner.myBoard.initializeBoard();
+
+		myRunner.myBoard.cells[0][0].contents = CellContents.X;
+		myRunner.myBoard.cells[0][1].contents = CellContents.O;
+
+		assertEquals(CellContents.X, myRunner.myBoard.cells[0][0].contents);
+		assertEquals(CellContents.O, myRunner.myBoard.cells[0][1].contents);
+
+		myRunner.swap(myRunner.myBoard);
+
+		assertEquals(CellContents.O, myRunner.myBoard.cells[0][0].contents);
+		assertEquals(CellContents.X, myRunner.myBoard.cells[0][1].contents);
 	}
 
 }

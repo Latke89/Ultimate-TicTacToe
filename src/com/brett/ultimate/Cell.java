@@ -8,6 +8,7 @@ public class Cell {
 	CellContents contents;
 	int row;
 	int column;
+	String drawContents = "";
 
 	public Cell(int row, int column) {
 		this.row = row;
@@ -21,12 +22,15 @@ public class Cell {
 	public void draw() {
 		switch(contents) {
 			case X:
+				drawContents = " X ";
 				System.out.print(" X ");
 				break;
 			case O:
+				drawContents = " O ";
 				System.out.print(" O ");
 				break;
 			case EMPTY:
+				drawContents = "   ";
 				System.out.print("   ");
 				break;
 		}
