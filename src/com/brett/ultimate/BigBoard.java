@@ -33,13 +33,7 @@ public class BigBoard {
 			for (int col = 0; col < COLS; col++) {
 				board[row][col].drawBoard();
 				if(col < COLS - 1) {
-					System.out.println("|");
-					System.out.println("|");
-					System.out.println("|");
-					System.out.println("|");
-					System.out.println("|");
-					System.out.println("|");
-					System.out.println("|");
+					System.out.print("|");
 				}
 			}
 			if(row < ROWS - 1) {
@@ -48,5 +42,7 @@ public class BigBoard {
 
 		}
 	}
+
+
 
 }

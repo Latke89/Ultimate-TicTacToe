@@ -15,11 +15,13 @@ public class RunnerTest {
 	Cell cell;
 	GameState gameState;
 	Runner myRunner;
+	BigCell bigCell;
 
 
 	@Before
 	public void setUp() throws Exception {
 		cell = new Cell(0, 0);
+		bigCell = new BigCell(0, 0);
 		myBoard = new Board();
 		myRunner = new Runner();
 	}
@@ -157,6 +159,28 @@ public class RunnerTest {
 
 		assertEquals(CellContents.O, myRunner.myBoard.cells[0][0].contents);
 		assertEquals(CellContents.X, myRunner.myBoard.cells[0][1].contents);
+	}
+
+	@Test
+	public void bigCell() {
+		bigCell.clear();
+		assertEquals(CellContents.EMPTY, bigCell.contents);
+
+		bigCell.draw();
+		assertEquals("   ", bigCell.drawContents);
+		bigCell.clear();
+		bigCell.contents = CellContents.X;
+		bigCell.draw();
+		assertEquals(" X ", bigCell.drawContents);
+
+		bigCell.contents = CellContents.O;
+		bigCell.draw();
+		assertEquals(" O ", bigCell.drawContents);
+
+		bigCell.contents = CellContents.D;
+		bigCell.draw();
+		assertEquals(" D ", bigCell.drawContents);
+
 	}
 
 }

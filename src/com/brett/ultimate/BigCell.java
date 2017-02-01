@@ -1,19 +1,15 @@
 package com.brett.ultimate;
 
 /**
- * Created by Brett on 1/27/17.
+ * Created by Brett on 2/1/17.
  */
-public class Cell {
-
+public class BigCell {
 	CellContents contents;
 	int row;
 	int column;
 	String drawContents = "";
 
-	public Cell() {
-	}
-
-	public Cell(int row, int column) {
+	public BigCell(int row, int column) {
 		this.row = row;
 		this.column = column;
 	}
@@ -26,16 +22,22 @@ public class Cell {
 		switch(contents) {
 			case X:
 				drawContents = " X ";
-				System.out.print(" X ");
+				System.out.println(" X ");
 				break;
 			case O:
 				drawContents = " O ";
-				System.out.print(" O ");
+				System.out.println(" O ");
 				break;
 			case EMPTY:
 				drawContents = "   ";
-				System.out.print("   ");
+				System.out.println("   ");
+				break;
+			case D:
+				drawContents = " D ";
+				System.out.println(" D ");
 				break;
 		}
+
 	}
+
 }
