@@ -16,7 +16,7 @@ public class RunnerTest {
 	GameState gameState;
 	Runner myRunner;
 	BigCell bigCell;
-
+	Ultimate ultimate;
 
 	@Before
 	public void setUp() throws Exception {
@@ -24,6 +24,7 @@ public class RunnerTest {
 		bigCell = new BigCell(0, 0);
 		myBoard = new Board();
 		myRunner = new Runner();
+		ultimate = new Ultimate();
 	}
 
 	@After
@@ -116,6 +117,7 @@ public class RunnerTest {
 	@Test
 	public void boardState() throws Exception {
 		myRunner.myBoard = new Board();
+		myRunner.myBoard.initializeBoard();
 		myRunner.myBoard.cells[0][0].contents = CellContents.X;
 		myRunner.myBoard.cells[0][1].contents = CellContents.O;
 		myRunner.myBoard.cells[0][2].contents = CellContents.X;
@@ -127,21 +129,21 @@ public class RunnerTest {
 		myRunner.myBoard.cells[2][2].contents = CellContents.O;
 
 		myRunner.checkBoardState(CellContents.O);
-		assertEquals(GameState.DRAW, myRunner.state);
+		assertEquals(GameState.DRAW, myRunner.myBoard.state);
 
 		myRunner.myBoard.initializeBoard();
 		myRunner.myBoard.cells[0][0].contents = CellContents.X;
 		myRunner.myBoard.cells[0][1].contents = CellContents.X;
 		myRunner.myBoard.cells[0][2].contents = CellContents.X;
 		myRunner.checkBoardState(CellContents.X);
-		assertEquals(GameState.X_WIN, myRunner.state);
+		assertEquals(GameState.X_WIN, myRunner.myBoard.state);
 
 		myRunner.myBoard.initializeBoard();
 		myRunner.myBoard.cells[0][2].contents = CellContents.O;
 		myRunner.myBoard.cells[1][1].contents = CellContents.O;
 		myRunner.myBoard.cells[2][0].contents = CellContents.O;
 		myRunner.checkBoardState(CellContents.O);
-		assertEquals(GameState.O_WIN, myRunner.state);
+		assertEquals(GameState.O_WIN, myRunner.myBoard.state);
 	}
 
 	@Test
@@ -183,4 +185,81 @@ public class RunnerTest {
 
 	}
 
+	@Test
+	public void getIndex() {
+		int boardIndex = 5;
+		int row = ultimate.getRow(boardIndex);
+		int col = ultimate.getCol(boardIndex);
+
+		assertEquals(1, row);
+		assertEquals(1, col);
+
+		boardIndex  = 9;
+		row = ultimate.getRow(boardIndex);
+		col = ultimate.getCol(boardIndex);
+
+		assertEquals(2, row);
+		assertEquals(2, col);
+	}
+
+	@Test
+	public void getBoard(){
+		int boardIndex = 2;
+		myBoard = ultimate.getSpecificBoard(boardIndex);
+
+		assertEquals(ultimate.bigBoard[1][0], myBoard);
+	}
+
+	@Test
+	public void ultimateBoardWin() {
+		int currentColumn = 0;
+		int currentRow = 2;
+		ultimate.bigBoard[0][0].state = GameState.X_WIN;
+		ultimate.bigBoard[0][1].state = GameState.X_WIN;
+		ultimate.bigBoard[0][2].state = GameState.X_WIN;
+		boolean win = ultimate.checkGameStatus(CellContents.X, currentRow, currentColumn);
+		assertEquals(true, win);
+
+		ultimate.resetUltimateBoard();
+
+		currentColumn = 1;
+		currentRow = 2;
+		ultimate.bigBoard[1][0].state = GameState.O_WIN;
+		ultimate.bigBoard[1][1].state = GameState.O_WIN;
+		ultimate.bigBoard[1][2].state = GameState.O_WIN;
+		win = ultimate.checkGameStatus(CellContents.O, currentRow, currentColumn);
+		assertEquals(true, win);
+
+		ultimate.resetUltimateBoard();
+
+		currentColumn = 1;
+		currentRow = 1;
+		ultimate.bigBoard[0][0].state = GameState.X_WIN;
+		ultimate.bigBoard[1][1].state = GameState.X_WIN;
+		ultimate.bigBoard[2][2].state = GameState.X_WIN;
+		win = ultimate.checkGameStatus(CellContents.X, currentRow, currentColumn);
+		assertEquals(true, win);
+
+		ultimate.resetUltimateBoard();
+
+		ultimate.bigBoard[0][2].state = GameState.O_WIN;
+		ultimate.bigBoard[1][1].state = GameState.O_WIN;
+		ultimate.bigBoard[2][0].state = GameState.O_WIN;
+		win = ultimate.checkGameStatus(CellContents.O, currentRow, currentColumn);
+		assertEquals(true, win);
+	}
+
+	public void ultimateDraw() {
+		ultimate.bigBoard[0][0].state = GameState.X_WIN;
+		ultimate.bigBoard[0][1].state = GameState.O_WIN;
+		ultimate.bigBoard[0][2].state = GameState.DRAW;
+		ultimate.bigBoard[1][0].state = GameState.DRAW;
+		ultimate.bigBoard[1][1].state = GameState.DRAW;
+		ultimate.bigBoard[1][2].state = GameState.X_WIN;
+		ultimate.bigBoard[2][0].state = GameState.X_WIN;
+		ultimate.bigBoard[2][1].state = GameState.DRAW;
+		ultimate.bigBoard[2][2].state = GameState.O_WIN;
+		boolean isDraw = ultimate.isDraw();
+		assertEquals(true, isDraw);
+	}
 }

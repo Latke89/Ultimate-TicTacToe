@@ -34,6 +34,9 @@ public class Cell {
 				drawContents = "   ";
 				System.out.print("   ");
 				break;
+			case D:
+				drawContents = " D ";
+				System.out.println(" D ");
 		}
 	}
 }

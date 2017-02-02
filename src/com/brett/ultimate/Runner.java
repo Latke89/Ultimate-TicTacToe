@@ -9,13 +9,15 @@ import java.util.Scanner;
  */
 public class Runner {
 	Board myBoard;
-	private CellContents currentPlayer;
 	GameState state;
 	private Scanner inputScanner = new Scanner(System.in);
+	private CellContents currentPlayer;
 	private int xCounter = 3;
 	private int oCounter = 3;
 	private int xSwap = 1;
 	private int oSwap = 1;
+	private int lastColumn;
+	private int lastRow;
 	int swapCooldown = 0;
 	private String choice = "";
 
@@ -23,8 +25,10 @@ public class Runner {
 	public static void main(String[] args) throws Exception {
 
 		Runner myRunner = new Runner();
-		myRunner.tictactoe();
-//		myRunner.bigBoard();
+		Ultimate ultimateGame = new Ultimate();
+		ultimateGame.playGame();
+//		myRunner.tictactoe();
+
 	}
 
 	public void tictactoe() throws Exception {
@@ -205,10 +209,10 @@ public class Runner {
 		}
 	}
 
-//	public void bigBoard() {
-//		bigBoard = new BigBoard();
-//		bigBoard.initialize();
-//		bigBoard.drawBoard();
-//	}
+	public void bigBoard() {
+		bigBoard = new BigBoard();
+		bigBoard.initialize();
+		bigBoard.drawBoard();
+	}
 
 }
