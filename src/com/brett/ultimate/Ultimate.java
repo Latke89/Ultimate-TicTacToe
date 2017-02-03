@@ -67,7 +67,7 @@ public class Ultimate {
 	public Board getSpecificBoard(int boardIndex) {
 		int row = getRow(boardIndex);
 		int col = getCol(boardIndex);
-		return bigBoard[col][row];
+		return bigBoard[row][col];
 	}
 
 	public boolean checkGameStatus(CellContents player, int currentRow, int currentColumn) {
@@ -132,11 +132,26 @@ public class Ultimate {
 		int col = getCol(move);
 		int row = getRow(move);
 		board.cells[row][col].contents = player;
+
+		if(board.isDraw()) {
+			ultimateDisplay.cells[row][col].contents = CellContents.D;
+			board.state = GameState.DRAW;
+		}
+		if(board.isWin(player)) {
+			if(player == CellContents.X) {
+				ultimateDisplay.cells[row][col].contents = CellContents.X;
+				board.state = GameState.X_WIN;
+			} else {
+				ultimateDisplay.cells[row][col].contents = CellContents.O;
+				board.state = GameState.O_WIN;
+			}
+		}
 	}
 
 	public void playGame() {
 		int row;
 		int column;
+		int newBoard;
 		Scanner inputScanner = new Scanner(System.in);
 		printBoardArray();
 		printUltimateDisplay();
@@ -146,6 +161,7 @@ public class Ultimate {
 		player = CellContents.X;
 
 		while(ultimateDisplay.state == GameState.PLAYING) {
+			System.out.println("Current player: " + player);
 			System.out.println("Where would you like to place your piece? (1-9)");
 			int move = Integer.valueOf(inputScanner.nextLine());
 			row = getRow(move);
@@ -153,16 +169,20 @@ public class Ultimate {
 
 			move(currentBoard, move, player);
 
-			if(currentBoard.isDraw()) {
-				ultimateDisplay.cells[column][row].contents = CellContents.D;
-			}
-			if(currentBoard.isWin(player)) {
-				if(player == CellContents.X) {
-					ultimateDisplay.cells[column][row].contents = CellContents.X;
-				} else {
-					ultimateDisplay.cells[column][row].contents = CellContents.O;
-				}
-			}
+//			if(currentBoard.isDraw()) {
+//				ultimateDisplay.cells[column][row].contents = CellContents.D;
+//				currentBoard.state = GameState.DRAW;
+//			}
+//			if(currentBoard.isWin(player)) {
+//				if(player == CellContents.X) {
+//					ultimateDisplay.cells[column][row].contents = CellContents.X;
+//					currentBoard.state = GameState.X_WIN;
+//
+//				} else {
+//					ultimateDisplay.cells[column][row].contents = CellContents.O;
+//					currentBoard.state = GameState.O_WIN;
+//				}
+//			}
 
 			if(checkGameStatus(player, row, column)) {
 				if(player == CellContents.X) {
@@ -180,11 +200,13 @@ public class Ultimate {
 			}
 
 			if(bigBoard[column][row].state != GameState.PLAYING) {
-				System.out.println("Please choose a board (1-9)");
-				int newBoard = Integer.valueOf(inputScanner.nextLine());
+				System.out.println("Please choose a valid board (1-9)");
+				newBoard = Integer.valueOf(inputScanner.nextLine());
 				currentBoard = getSpecificBoard(newBoard);
+				printBoardArray();
 			} else {
 				currentBoard = getSpecificBoard(move);
+				printBoardArray();
 			}
 
 			if(player == CellContents.X) {
@@ -195,6 +217,7 @@ public class Ultimate {
 
 //			printBoardArray();
 //			printUltimateDisplay();
+			System.out.println("Current Board");
 			currentBoard.drawBoard();
 
 		}
