@@ -1,5 +1,7 @@
 package com.brett.ultimate;
 
+import java.util.Scanner;
+
 /**
  * Created by Brett on 2/2/17.
  */
@@ -126,11 +128,74 @@ public class Ultimate {
 		return true;
 	}
 
+	public void move(Board board, int move, CellContents player) {
+		int col = getCol(move);
+		int row = getRow(move);
+		board.cells[row][col].contents = player;
+	}
+
 	public void playGame() {
+		int row;
+		int column;
+		Scanner inputScanner = new Scanner(System.in);
 		printBoardArray();
 		printUltimateDisplay();
+		System.out.println("Please choose a board to play on (1-9)");
+		int boardIndex = Integer.valueOf(inputScanner.nextLine());
+		Board currentBoard = getSpecificBoard(boardIndex);
+		player = CellContents.X;
 
 		while(ultimateDisplay.state == GameState.PLAYING) {
+			System.out.println("Where would you like to place your piece? (1-9)");
+			int move = Integer.valueOf(inputScanner.nextLine());
+			row = getRow(move);
+			column = getCol(move);
+
+			move(currentBoard, move, player);
+
+			if(currentBoard.isDraw()) {
+				ultimateDisplay.cells[column][row].contents = CellContents.D;
+			}
+			if(currentBoard.isWin(player)) {
+				if(player == CellContents.X) {
+					ultimateDisplay.cells[column][row].contents = CellContents.X;
+				} else {
+					ultimateDisplay.cells[column][row].contents = CellContents.O;
+				}
+			}
+
+			if(checkGameStatus(player, row, column)) {
+				if(player == CellContents.X) {
+					ultimateDisplay.state = GameState.X_WIN;
+					System.out.println("Congratulations, X wins!");
+				} else {
+					ultimateDisplay.state = GameState.O_WIN;
+					System.out.println("Congratulations, O wins!");
+				}
+			}
+
+			if(isDraw()) {
+				ultimateDisplay.state = GameState.DRAW;
+				System.out.println("Game is a draw!");
+			}
+
+			if(bigBoard[column][row].state != GameState.PLAYING) {
+				System.out.println("Please choose a board (1-9)");
+				int newBoard = Integer.valueOf(inputScanner.nextLine());
+				currentBoard = getSpecificBoard(newBoard);
+			} else {
+				currentBoard = getSpecificBoard(move);
+			}
+
+			if(player == CellContents.X) {
+				player = CellContents.O;
+			} else {
+				player = CellContents.X;
+			}
+
+//			printBoardArray();
+//			printUltimateDisplay();
+			currentBoard.drawBoard();
 
 		}
 	}
