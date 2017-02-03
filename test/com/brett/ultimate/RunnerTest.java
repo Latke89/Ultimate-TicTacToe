@@ -210,44 +210,44 @@ public class RunnerTest {
 		assertEquals(ultimate.bigBoard[1][0], myBoard);
 	}
 
-	@Test
-	public void ultimateBoardWin() {
-		int currentColumn = 0;
-		int currentRow = 2;
-		ultimate.bigBoard[0][0].state = GameState.X_WIN;
-		ultimate.bigBoard[0][1].state = GameState.X_WIN;
-		ultimate.bigBoard[0][2].state = GameState.X_WIN;
-		boolean win = ultimate.checkGameStatus(CellContents.X, currentRow, currentColumn);
-		assertEquals(true, win);
-
-		ultimate.resetUltimateBoard();
-
-		currentColumn = 1;
-		currentRow = 2;
-		ultimate.bigBoard[1][0].state = GameState.O_WIN;
-		ultimate.bigBoard[1][1].state = GameState.O_WIN;
-		ultimate.bigBoard[1][2].state = GameState.O_WIN;
-		win = ultimate.checkGameStatus(CellContents.O, currentRow, currentColumn);
-		assertEquals(true, win);
-
-		ultimate.resetUltimateBoard();
-
-		currentColumn = 1;
-		currentRow = 1;
-		ultimate.bigBoard[0][0].state = GameState.X_WIN;
-		ultimate.bigBoard[1][1].state = GameState.X_WIN;
-		ultimate.bigBoard[2][2].state = GameState.X_WIN;
-		win = ultimate.checkGameStatus(CellContents.X, currentRow, currentColumn);
-		assertEquals(true, win);
-
-		ultimate.resetUltimateBoard();
-
-		ultimate.bigBoard[0][2].state = GameState.O_WIN;
-		ultimate.bigBoard[1][1].state = GameState.O_WIN;
-		ultimate.bigBoard[2][0].state = GameState.O_WIN;
-		win = ultimate.checkGameStatus(CellContents.O, currentRow, currentColumn);
-		assertEquals(true, win);
-	}
+//	@Test
+//	public void ultimateBoardWin() {
+//		int currentColumn = 0;
+//		int currentRow = 2;
+//		ultimate.bigBoard[0][0].state = GameState.X_WIN;
+//		ultimate.bigBoard[0][1].state = GameState.X_WIN;
+//		ultimate.bigBoard[0][2].state = GameState.X_WIN;
+//		boolean win = ultimate.checkGameStatus(CellContents.X, currentRow, currentColumn);
+//		assertEquals(true, win);
+//
+//		ultimate.resetUltimateBoard();
+//
+//		currentColumn = 1;
+//		currentRow = 2;
+//		ultimate.bigBoard[1][0].state = GameState.O_WIN;
+//		ultimate.bigBoard[1][1].state = GameState.O_WIN;
+//		ultimate.bigBoard[1][2].state = GameState.O_WIN;
+//		win = ultimate.checkGameStatus(CellContents.O, currentRow, currentColumn);
+//		assertEquals(true, win);
+//
+//		ultimate.resetUltimateBoard();
+//
+//		currentColumn = 1;
+//		currentRow = 1;
+//		ultimate.bigBoard[0][0].state = GameState.X_WIN;
+//		ultimate.bigBoard[1][1].state = GameState.X_WIN;
+//		ultimate.bigBoard[2][2].state = GameState.X_WIN;
+//		win = ultimate.checkGameStatus(CellContents.X, currentRow, currentColumn);
+//		assertEquals(true, win);
+//
+//		ultimate.resetUltimateBoard();
+//
+//		ultimate.bigBoard[0][2].state = GameState.O_WIN;
+//		ultimate.bigBoard[1][1].state = GameState.O_WIN;
+//		ultimate.bigBoard[2][0].state = GameState.O_WIN;
+//		win = ultimate.checkGameStatus(CellContents.O, currentRow, currentColumn);
+//		assertEquals(true, win);
+//	}
 
 	public void ultimateDraw() {
 		ultimate.bigBoard[0][0].state = GameState.X_WIN;

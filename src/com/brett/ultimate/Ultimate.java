@@ -10,8 +10,9 @@ public class Ultimate {
 	private static final int COLS = 3;
 	private int currentRow;
 	private int currentColumn;
-	private int lastRow;
-	private int lastColumn;
+	private int currentMove;
+	private boolean hasSwappedThisTurn = false;
+	private Board currentBoard;
 	private CellContents player;
 	Board[][] bigBoard;
 	Board ultimateDisplay;
@@ -78,7 +79,9 @@ public class Ultimate {
 	}
 
 	// Checks to see if the large board has been won by X or O
-	public boolean checkGameStatus(CellContents player, int currentRow, int currentColumn) {
+	public boolean checkGameStatus(CellContents player, int move) {
+		int currentRow = getRow(move);
+		int currentColumn = getCol(move);
 		if(player == CellContents.X) {
 			if(bigBoard[currentColumn][0].state == GameState.X_WIN
 					&& bigBoard[currentColumn][1].state == GameState.X_WIN
@@ -198,19 +201,20 @@ public class Ultimate {
 
 	// Runs the game / main game loop
 	public void playGame() {
-		int row;
-		int column;
 		int newBoard;
 		int swapCooldown = 0;
 		int xSwap = 1;
 		int oSwap = 1;
 		String choice;
+
 		Scanner inputScanner = new Scanner(System.in);
 		printBoardArray();
 		printUltimateDisplay();
+
 		System.out.println("Please choose a board to play on (1-9)");
+
 		int boardIndex = Integer.valueOf(inputScanner.nextLine());
-		Board currentBoard = getSpecificBoard(boardIndex);
+		currentBoard = getSpecificBoard(boardIndex);
 		player = CellContents.X;
 
 		while(ultimateDisplay.state == GameState.PLAYING) {
@@ -224,12 +228,13 @@ public class Ultimate {
 				choice = inputScanner.nextLine();
 				if(choice.equalsIgnoreCase("move")) {
 					System.out.println("Where would you like to place your piece? (1-9)");
-					int move = Integer.valueOf(inputScanner.nextLine());
-					row = getRow(move);
-					column = getCol(move);
+					System.out.print("> ");
+					currentMove = Integer.valueOf(inputScanner.nextLine());
+					currentRow = getRow(currentMove);
+					currentColumn = getCol(currentMove);
 
-					if(validateMove(currentBoard, move)) {
-						move(currentBoard, move, player);
+					if(validateMove(currentBoard, currentMove)) {
+						move(currentBoard, currentMove, player);
 						flag = false;
 					} else {
 						System.out.println("Invalid move, that space is occupied");
@@ -245,8 +250,9 @@ public class Ultimate {
 						} else {
 							oSwap--;
 						}
+						flag = false;
+						hasSwappedThisTurn = true;
 					}
-					flag = false;
 				} else if(choice.equalsIgnoreCase("erase")) {
 
 //					erase();
@@ -257,15 +263,7 @@ public class Ultimate {
 
 			}
 
-			System.out.println("Where would you like to place your piece? (1-9)");
-			int move = Integer.valueOf(inputScanner.nextLine());
-			row = getRow(move);
-			column = getCol(move);
-
-			move(currentBoard, move, player);
-
-
-			if(checkGameStatus(player, row, column)) {
+			if(checkGameStatus(player, currentMove)) {
 				if(player == CellContents.X) {
 					ultimateDisplay.state = GameState.X_WIN;
 					System.out.println("Congratulations, X wins!");
@@ -280,13 +278,26 @@ public class Ultimate {
 				System.out.println("Game is a draw!");
 			}
 
-			if(bigBoard[column][row].state != GameState.PLAYING) {
-				System.out.println("Please choose a valid board (1-9)");
-				newBoard = Integer.valueOf(inputScanner.nextLine());
-				currentBoard = getSpecificBoard(newBoard);
-				printBoardArray();
+			if((bigBoard[currentColumn][currentRow].state != GameState.PLAYING) || hasSwappedThisTurn) {
+				boolean isBoardValid = false;
+
+				while(!isBoardValid) {
+					printBoardArray();
+					System.out.println("Please choose a valid board (1-9)");
+					newBoard = Integer.valueOf(inputScanner.nextLine());
+					currentBoard = getSpecificBoard(newBoard);
+					if(currentBoard.state == GameState.PLAYING) {
+						isBoardValid = true;
+					} else {
+						System.out.println("Please choose a valid board that has not been won");
+					}
+					if(hasSwappedThisTurn) {
+						hasSwappedThisTurn = false;
+					}
+				}
+
 			} else {
-				currentBoard = getSpecificBoard(move);
+				currentBoard = getSpecificBoard(currentMove);
 				printBoardArray();
 			}
 
@@ -300,9 +311,7 @@ public class Ultimate {
 				swapCooldown--;
 			}
 
-//			printBoardArray();
-//			printUltimateDisplay();
-			System.out.println("Current Board");
+			System.out.println("Current Board is Board " + currentMove);
 			currentBoard.drawBoard();
 
 		}
