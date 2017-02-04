@@ -173,13 +173,15 @@ public class Ultimate {
 		}
 	}
 
-	// Erases indicated cell, unless it is yours, or is empty
-	public void erase(Board board, CellContents player, int row, int col) {
+	// Checks indicated cell, returns true if you can erase, false if it is yours, or is empty
+	public boolean erase(Board board, CellContents player, int row, int col) {
 		Cell cell = board.cells[row][col];
 		if(cell.contents == player || cell.contents == CellContents.EMPTY) {
 			System.out.println("Invalid square, try again!");
+			return false;
 		} else {
-			cell.contents = CellContents.EMPTY;
+//			cell.contents = CellContents.EMPTY;
+			return true;
 		}
 	}
 
@@ -205,6 +207,8 @@ public class Ultimate {
 		int swapCooldown = 0;
 		int xSwap = 1;
 		int oSwap = 1;
+		int xErase = 3;
+		int oErase = 3;
 		String choice;
 
 		Scanner inputScanner = new Scanner(System.in);
@@ -254,9 +258,21 @@ public class Ultimate {
 						hasSwappedThisTurn = true;
 					}
 				} else if(choice.equalsIgnoreCase("erase")) {
+					if(erase(currentBoard, player, currentRow, currentColumn)) {
+						if((player == CellContents.X && xErase > 0)
+								|| (player == CellContents.O && oErase > 0)) {
+							if(player == CellContents.X) {
+								xErase--;
+							} else {
+								oErase--;
+							}
+							currentBoard.cells[currentRow][currentColumn].contents = CellContents.EMPTY;
+							flag = false;
+						}
 
-//					erase();
-					flag = false;
+					} else {
+						System.out.println("The tile is either empty, or your own. Please try again.");
+					}
 				} else {
 					System.out.println("Please enter either \"move\", \"switch\", or \"erase\"");
 				}
