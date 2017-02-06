@@ -18,7 +18,7 @@ public class Runner {
 	private int oSwap = 1;
 	private int col;
 	private int row;
-	int swapCooldown = 0;
+	private int swapCooldown = 0;
 	private String choice = "";
 
 	public static void main(String[] args) throws Exception {

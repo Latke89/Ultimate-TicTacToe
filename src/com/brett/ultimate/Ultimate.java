@@ -32,7 +32,7 @@ public class Ultimate {
 		ultimateDisplay.initializeBoard();
 	}
 
-	// Resets all squares in the Board array and Ultimate display to empty
+	// Resets all squares in the Board array and Ultimate display to empty. Utilized to play multiple games in a row
 	public void resetUltimateBoard() {
 		for (int row = 0; row < ROWS; row++) {
 			for (int col = 0; col < COLS; col++) {
