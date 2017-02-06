@@ -21,7 +21,6 @@ public class Runner {
 	int swapCooldown = 0;
 	private String choice = "";
 
-	BigBoard bigBoard;
 	public static void main(String[] args) throws Exception {
 
 		Runner myRunner = new Runner();
@@ -207,12 +206,6 @@ public class Runner {
 				System.out.println("Congratulations, O's win!");
 			}
 		}
-	}
-
-	public void bigBoard() {
-		bigBoard = new BigBoard();
-		bigBoard.initialize();
-		bigBoard.drawBoard();
 	}
 
 }
