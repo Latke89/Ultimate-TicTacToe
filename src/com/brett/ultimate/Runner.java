@@ -16,8 +16,8 @@ public class Runner {
 	private int oCounter = 3;
 	private int xSwap = 1;
 	private int oSwap = 1;
-	private int lastColumn;
-	private int lastRow;
+	private int col;
+	private int row;
 	int swapCooldown = 0;
 	private String choice = "";
 
@@ -128,9 +128,9 @@ public class Runner {
 			}
 
 			System.out.print("> ");
-			int col = Integer.valueOf(inputScanner.nextLine()) - 1;
+			col = Integer.valueOf(inputScanner.nextLine()) - 1;
 			System.out.print("> ");
-			int row = Integer.valueOf(inputScanner.nextLine()) - 1;
+			row = Integer.valueOf(inputScanner.nextLine()) - 1;
 
 //		System.out.println(col + ", " + row);
 
@@ -142,7 +142,7 @@ public class Runner {
 			}
 		}
 
-		checkBoardState(current);
+		checkBoardState(current, row, col);
 
 	}
 
@@ -193,10 +193,10 @@ public class Runner {
 
 	}
 
-	public void checkBoardState(CellContents current){
+	public void checkBoardState(CellContents current, int currentRow, int currentCol){
 		if(myBoard.isDraw()){
 			myBoard.state = GameState.DRAW;
-		} else if(myBoard.isWin(current)) {
+		} else if(myBoard.isWin(current, currentRow, currentCol)) {
 			if (current == CellContents.X) {
 				myBoard.drawBoard();
 				myBoard.state = GameState.X_WIN;

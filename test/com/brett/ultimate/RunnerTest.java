@@ -4,6 +4,8 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.util.ArrayList;
+
 import static org.junit.Assert.*;
 
 /**
@@ -83,68 +85,68 @@ public class RunnerTest {
 		assertEquals(true, myBoard.isDraw());
 	}
 
-	@Test
-	public void isWin() throws Exception {
-		myBoard.initializeBoard();
-		myBoard.cells[0][0].contents = current.O;
-		myBoard.cells[0][1].contents = current.O;
-		myBoard.cells[0][2].contents = current.O;
-		assertEquals(false, myBoard.isWin(current.X));
-		assertEquals(true, myBoard.isWin(current.O));
-
-		myBoard.initializeBoard();
-		myBoard.cells[0][0].contents = current.X;
-		myBoard.cells[1][0].contents = current.X;
-		myBoard.cells[2][0].contents = current.X;
-		assertEquals(false, myBoard.isWin(current.O));
-		assertEquals(true, myBoard.isWin(current.X));
-
-		myBoard.initializeBoard();
-		myBoard.cells[0][0].contents = current.X;
-		myBoard.cells[1][1].contents = current.X;
-		myBoard.cells[2][2].contents = current.X;
-		assertEquals(false, myBoard.isWin(current.O));
-		assertEquals(true, myBoard.isWin(current.X));
-
-		myBoard.initializeBoard();
-		myBoard.cells[2][0].contents = current.O;
-		myBoard.cells[1][1].contents = current.O;
-		myBoard.cells[0][2].contents = current.O;
-		assertEquals(false, myBoard.isWin(current.X));
-		assertEquals(true, myBoard.isWin(current.O));
-	}
-
-	@Test
-	public void boardState() throws Exception {
-		myRunner.myBoard = new Board();
-		myRunner.myBoard.initializeBoard();
-		myRunner.myBoard.cells[0][0].contents = CellContents.X;
-		myRunner.myBoard.cells[0][1].contents = CellContents.O;
-		myRunner.myBoard.cells[0][2].contents = CellContents.X;
-		myRunner.myBoard.cells[1][0].contents = CellContents.O;
-		myRunner.myBoard.cells[1][1].contents = CellContents.O;
-		myRunner.myBoard.cells[1][2].contents = CellContents.X;
-		myRunner.myBoard.cells[2][0].contents = CellContents.X;
-		myRunner.myBoard.cells[2][1].contents = CellContents.X;
-		myRunner.myBoard.cells[2][2].contents = CellContents.O;
-
-		myRunner.checkBoardState(CellContents.O);
-		assertEquals(GameState.DRAW, myRunner.myBoard.state);
-
-		myRunner.myBoard.initializeBoard();
-		myRunner.myBoard.cells[0][0].contents = CellContents.X;
-		myRunner.myBoard.cells[0][1].contents = CellContents.X;
-		myRunner.myBoard.cells[0][2].contents = CellContents.X;
-		myRunner.checkBoardState(CellContents.X);
-		assertEquals(GameState.X_WIN, myRunner.myBoard.state);
-
-		myRunner.myBoard.initializeBoard();
-		myRunner.myBoard.cells[0][2].contents = CellContents.O;
-		myRunner.myBoard.cells[1][1].contents = CellContents.O;
-		myRunner.myBoard.cells[2][0].contents = CellContents.O;
-		myRunner.checkBoardState(CellContents.O);
-		assertEquals(GameState.O_WIN, myRunner.myBoard.state);
-	}
+//	@Test
+//	public void isWin() throws Exception {
+//		myBoard.initializeBoard();
+//		myBoard.cells[0][0].contents = current.O;
+//		myBoard.cells[0][1].contents = current.O;
+//		myBoard.cells[0][2].contents = current.O;
+//		assertEquals(false, myBoard.isWin(current.X));
+//		assertEquals(true, myBoard.isWin(current.O));
+//
+//		myBoard.initializeBoard();
+//		myBoard.cells[0][0].contents = current.X;
+//		myBoard.cells[1][0].contents = current.X;
+//		myBoard.cells[2][0].contents = current.X;
+//		assertEquals(false, myBoard.isWin(current.O));
+//		assertEquals(true, myBoard.isWin(current.X));
+//
+//		myBoard.initializeBoard();
+//		myBoard.cells[0][0].contents = current.X;
+//		myBoard.cells[1][1].contents = current.X;
+//		myBoard.cells[2][2].contents = current.X;
+//		assertEquals(false, myBoard.isWin(current.O));
+//		assertEquals(true, myBoard.isWin(current.X));
+//
+//		myBoard.initializeBoard();
+//		myBoard.cells[2][0].contents = current.O;
+//		myBoard.cells[1][1].contents = current.O;
+//		myBoard.cells[0][2].contents = current.O;
+//		assertEquals(false, myBoard.isWin(current.X));
+//		assertEquals(true, myBoard.isWin(current.O));
+//	}
+//
+//	@Test
+//	public void boardState() throws Exception {
+//		myRunner.myBoard = new Board();
+//		myRunner.myBoard.initializeBoard();
+//		myRunner.myBoard.cells[0][0].contents = CellContents.X;
+//		myRunner.myBoard.cells[0][1].contents = CellContents.O;
+//		myRunner.myBoard.cells[0][2].contents = CellContents.X;
+//		myRunner.myBoard.cells[1][0].contents = CellContents.O;
+//		myRunner.myBoard.cells[1][1].contents = CellContents.O;
+//		myRunner.myBoard.cells[1][2].contents = CellContents.X;
+//		myRunner.myBoard.cells[2][0].contents = CellContents.X;
+//		myRunner.myBoard.cells[2][1].contents = CellContents.X;
+//		myRunner.myBoard.cells[2][2].contents = CellContents.O;
+//
+//		myRunner.checkBoardState(CellContents.O);
+//		assertEquals(GameState.DRAW, myRunner.myBoard.state);
+//
+//		myRunner.myBoard.initializeBoard();
+//		myRunner.myBoard.cells[0][0].contents = CellContents.X;
+//		myRunner.myBoard.cells[0][1].contents = CellContents.X;
+//		myRunner.myBoard.cells[0][2].contents = CellContents.X;
+//		myRunner.checkBoardState(CellContents.X);
+//		assertEquals(GameState.X_WIN, myRunner.myBoard.state);
+//
+//		myRunner.myBoard.initializeBoard();
+//		myRunner.myBoard.cells[0][2].contents = CellContents.O;
+//		myRunner.myBoard.cells[1][1].contents = CellContents.O;
+//		myRunner.myBoard.cells[2][0].contents = CellContents.O;
+//		myRunner.checkBoardState(CellContents.O);
+//		assertEquals(GameState.O_WIN, myRunner.myBoard.state);
+//	}
 
 	@Test
 	public void swap() throws Exception {
@@ -203,52 +205,40 @@ public class RunnerTest {
 	}
 
 	@Test
-	public void getBoard(){
-		int boardIndex = 2;
-		myBoard = ultimate.getSpecificBoard(boardIndex);
+	public void ultimateBoardWin() {
+		ultimate.bigBoard[0][0].state = GameState.X_WIN;
+		ultimate.bigBoard[0][1].state = GameState.X_WIN;
+		ultimate.bigBoard[0][2].state = GameState.X_WIN;
+		boolean win = ultimate.checkGameStatus(CellContents.X, 2);
 
-		assertEquals(ultimate.bigBoard[1][0], myBoard);
+		assertEquals(true, win);
+
+		ultimate.resetUltimateBoard();
+
+		ultimate.bigBoard[1][0].state = GameState.O_WIN;
+		ultimate.bigBoard[1][1].state = GameState.O_WIN;
+		ultimate.bigBoard[1][2].state = GameState.O_WIN;
+		win = ultimate.checkGameStatus(CellContents.O, 8);
+		assertEquals(true, win);
+
+		ultimate.resetUltimateBoard();
+
+		ultimate.bigBoard[0][0].state = GameState.X_WIN;
+		ultimate.bigBoard[1][1].state = GameState.X_WIN;
+		ultimate.bigBoard[2][2].state = GameState.X_WIN;
+		win = ultimate.checkGameStatus(CellContents.X, 9);
+		assertEquals(true, win);
+
+		ultimate.resetUltimateBoard();
+
+		ultimate.bigBoard[0][2].state = GameState.O_WIN;
+		ultimate.bigBoard[1][1].state = GameState.O_WIN;
+		ultimate.bigBoard[2][0].state = GameState.O_WIN;
+		win = ultimate.checkGameStatus(CellContents.O, 7);
+		assertEquals(true, win);
 	}
 
-//	@Test
-//	public void ultimateBoardWin() {
-//		int currentColumn = 0;
-//		int currentRow = 2;
-//		ultimate.bigBoard[0][0].state = GameState.X_WIN;
-//		ultimate.bigBoard[0][1].state = GameState.X_WIN;
-//		ultimate.bigBoard[0][2].state = GameState.X_WIN;
-//		boolean win = ultimate.checkGameStatus(CellContents.X, currentRow, currentColumn);
-//		assertEquals(true, win);
-//
-//		ultimate.resetUltimateBoard();
-//
-//		currentColumn = 1;
-//		currentRow = 2;
-//		ultimate.bigBoard[1][0].state = GameState.O_WIN;
-//		ultimate.bigBoard[1][1].state = GameState.O_WIN;
-//		ultimate.bigBoard[1][2].state = GameState.O_WIN;
-//		win = ultimate.checkGameStatus(CellContents.O, currentRow, currentColumn);
-//		assertEquals(true, win);
-//
-//		ultimate.resetUltimateBoard();
-//
-//		currentColumn = 1;
-//		currentRow = 1;
-//		ultimate.bigBoard[0][0].state = GameState.X_WIN;
-//		ultimate.bigBoard[1][1].state = GameState.X_WIN;
-//		ultimate.bigBoard[2][2].state = GameState.X_WIN;
-//		win = ultimate.checkGameStatus(CellContents.X, currentRow, currentColumn);
-//		assertEquals(true, win);
-//
-//		ultimate.resetUltimateBoard();
-//
-//		ultimate.bigBoard[0][2].state = GameState.O_WIN;
-//		ultimate.bigBoard[1][1].state = GameState.O_WIN;
-//		ultimate.bigBoard[2][0].state = GameState.O_WIN;
-//		win = ultimate.checkGameStatus(CellContents.O, currentRow, currentColumn);
-//		assertEquals(true, win);
-//	}
-
+	@Test
 	public void ultimateDraw() {
 		ultimate.bigBoard[0][0].state = GameState.X_WIN;
 		ultimate.bigBoard[0][1].state = GameState.O_WIN;
@@ -261,5 +251,83 @@ public class RunnerTest {
 		ultimate.bigBoard[2][2].state = GameState.O_WIN;
 		boolean isDraw = ultimate.isDraw();
 		assertEquals(true, isDraw);
+	}
+
+	@Test
+	public void innerBoardValidation() {
+//		Board currentBoard = ultimate.getSpecificBoard(2);
+//		assertEquals(ultimate.bigBoard[0][1], currentBoard);
+//
+//		ultimate.move(currentBoard, 4, CellContents.X);
+//		ultimate.move(currentBoard, 5, CellContents.X);
+//		ultimate.move(currentBoard, 6, CellContents.X);
+//
+//		assertEquals(GameState.X_WIN, currentBoard.state);
+//
+//		currentBoard = ultimate.getSpecificBoard(1);
+//
+//		ultimate.move(currentBoard, 1, CellContents.X);
+//		ultimate.move(currentBoard, 5, CellContents.X);
+//		ultimate.move(currentBoard, 9, CellContents.X);
+//
+//		assertEquals(GameState.X_WIN, currentBoard.state);
+//
+//		currentBoard = ultimate.getSpecificBoard(3);
+//
+//		ultimate.move(currentBoard, 1, CellContents.X);
+//		ultimate.move(currentBoard, 4, CellContents.X);
+//		ultimate.move(currentBoard, 7, CellContents.X);
+//
+//		assertEquals(GameState.X_WIN, currentBoard.state);
+//
+//		boolean isWin = ultimate.checkGameStatus(CellContents.X, 3);
+//
+//		assertEquals(true, isWin);
+//
+//		ultimate.resetUltimateBoard();
+//
+//		currentBoard = ultimate.getSpecificBoard(1);
+//
+//		ultimate.move(currentBoard, 3, CellContents.O);
+//		ultimate.move(currentBoard, 5, CellContents.O);
+//		ultimate.move(currentBoard, 7, CellContents.O);
+//
+//		assertEquals(GameState.O_WIN, currentBoard.state);
+//
+//		currentBoard = ultimate.getSpecificBoard(5);
+//
+//		ultimate.move(currentBoard, 3, CellContents.O);
+//		ultimate.move(currentBoard, 6, CellContents.O);
+//		ultimate.move(currentBoard, 9, CellContents.O);
+//
+//		assertEquals(GameState.O_WIN, currentBoard.state);
+//
+//		currentBoard = ultimate.getSpecificBoard(9);
+//
+//		ultimate.move(currentBoard, 7, CellContents.O);
+//		ultimate.move(currentBoard, 8, CellContents.O);
+//		ultimate.move(currentBoard, 9, CellContents.O);
+//
+//		assertEquals(GameState.O_WIN, currentBoard.state);
+//
+//		isWin = ultimate.checkGameStatus(CellContents.O, 9);
+//		assertEquals(true, isWin);
+	}
+
+	@Test
+	public void checkAllBoards() {
+
+		ArrayList<Board> allBoards = new ArrayList<>();
+		for (int row = 0; row < 3; row++) {
+			for (int col = 0; col < 3; col++) {
+				allBoards.add(ultimate.bigBoard[row][col]);
+			}
+		}
+		int count = 1;
+		for (Board myBoard : allBoards) {
+			Board currentBoard = ultimate.getSpecificBoard(count);
+			assertEquals(currentBoard, myBoard);
+			count++;
+		}
 	}
 }

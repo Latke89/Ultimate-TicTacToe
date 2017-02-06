@@ -43,7 +43,7 @@ public class Board {
 		return true; // if no empty cell, game ends in Draw
 	}
 
-	public boolean isWin(CellContents current) {
+	public boolean isWin(CellContents current, int currentRow, int currentCol) {
 		if ((cells[currentRow][0].contents == current
 				&& cells[currentRow][1].contents == current
 				&& cells[currentRow][2].contents == current)

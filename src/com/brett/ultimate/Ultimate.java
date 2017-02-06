@@ -10,7 +10,9 @@ public class Ultimate {
 	private static final int COLS = 3;
 	private int currentRow;
 	private int currentColumn;
-	private int currentMove;
+	private int previousRow = 3;
+	private int previousColumn = 3;
+	private int currentMove = 1;
 	private boolean hasSwappedThisTurn = false;
 	private Board currentBoard;
 	private CellContents player;
@@ -83,45 +85,33 @@ public class Ultimate {
 		int currentRow = getRow(move);
 		int currentColumn = getCol(move);
 		if(player == CellContents.X) {
-			if(bigBoard[currentColumn][0].state == GameState.X_WIN
-					&& bigBoard[currentColumn][1].state == GameState.X_WIN
-					&& bigBoard[currentColumn][2].state == GameState.X_WIN) {
-				return true;
-			}
-			if(bigBoard[0][currentRow].state == GameState.X_WIN
-					&& bigBoard[1][currentRow].state == GameState.X_WIN
-					&& bigBoard[2][currentRow].state == GameState.X_WIN) {
-				return true;
-			}
-			if(bigBoard[0][0].state == GameState.X_WIN
+			if((bigBoard[currentRow][0].state == GameState.X_WIN
+					&& bigBoard[currentRow][1].state == GameState.X_WIN
+					&& bigBoard[currentRow][2].state == GameState.X_WIN)
+				|| (bigBoard[0][currentColumn].state == GameState.X_WIN
+					&& bigBoard[1][currentColumn].state == GameState.X_WIN
+					&& bigBoard[2][currentColumn].state == GameState.X_WIN)
+				|| (bigBoard[0][0].state == GameState.X_WIN
 					&& bigBoard[1][1].state == GameState.X_WIN
-					&& bigBoard[2][2].state == GameState.X_WIN) {
-				return true;
-			}
-			if(bigBoard[0][2].state == GameState.X_WIN
+					&& bigBoard[2][2].state == GameState.X_WIN)
+				|| (bigBoard[0][2].state == GameState.X_WIN
 					&& bigBoard[1][1].state == GameState.X_WIN
-					&& bigBoard[2][0].state == GameState.X_WIN) {
+					&& bigBoard[2][0].state == GameState.X_WIN)) {
 				return true;
 			}
 		} else {
-			if(bigBoard[currentColumn][0].state == GameState.O_WIN
+			if((bigBoard[currentColumn][0].state == GameState.O_WIN
 					&& bigBoard[currentColumn][1].state == GameState.O_WIN
-					&& bigBoard[currentColumn][2].state == GameState.O_WIN) {
-				return true;
-			}
-			if(bigBoard[0][currentRow].state == GameState.O_WIN
+					&& bigBoard[currentColumn][2].state == GameState.O_WIN)
+				|| (bigBoard[0][currentRow].state == GameState.O_WIN
 					&& bigBoard[1][currentRow].state == GameState.O_WIN
-					&& bigBoard[2][currentRow].state == GameState.O_WIN) {
-				return true;
-			}
-			if(bigBoard[0][0].state == GameState.O_WIN
+					&& bigBoard[2][currentRow].state == GameState.O_WIN)
+				|| (bigBoard[0][0].state == GameState.O_WIN
 					&& bigBoard[1][1].state == GameState.O_WIN
-					&& bigBoard[2][2].state == GameState.O_WIN) {
-				return true;
-			}
-			if(bigBoard[0][2].state == GameState.O_WIN
+					&& bigBoard[2][2].state == GameState.O_WIN)
+				|| (bigBoard[0][2].state == GameState.O_WIN
 					&& bigBoard[1][1].state == GameState.O_WIN
-					&& bigBoard[2][0].state == GameState.O_WIN) {
+					&& bigBoard[2][0].state == GameState.O_WIN)) {
 				return true;
 			}
 		}
@@ -141,22 +131,24 @@ public class Ultimate {
 	}
 
 	// Initiates a move on the specified board, and checks if the current board is won by the player
-	public void move(Board board, int move, CellContents player) {
+	public void move(Board board, int move, CellContents player, int previousRow, int previousColumn) {
 		int col = getCol(move);
 		int row = getRow(move);
 		board.cells[row][col].contents = player;
 
-		if(board.isDraw()) {
-			ultimateDisplay.cells[row][col].contents = CellContents.D;
-			board.state = GameState.DRAW;
-		}
-		if(board.isWin(player)) {
-			if(player == CellContents.X) {
-				ultimateDisplay.cells[row][col].contents = CellContents.X;
-				board.state = GameState.X_WIN;
-			} else {
-				ultimateDisplay.cells[row][col].contents = CellContents.O;
-				board.state = GameState.O_WIN;
+		if(previousRow < 3 || previousColumn < 3) {
+			if (board.isDraw()) {
+				ultimateDisplay.cells[row][col].contents = CellContents.D;
+				board.state = GameState.DRAW;
+			}
+			if (board.isWin(player, row, col)) {
+				if (player == CellContents.X) {
+					ultimateDisplay.cells[previousRow][previousColumn].contents = CellContents.X;
+					board.state = GameState.X_WIN;
+				} else {
+					ultimateDisplay.cells[previousRow][previousColumn].contents = CellContents.O;
+					board.state = GameState.O_WIN;
+				}
 			}
 		}
 	}
@@ -177,7 +169,7 @@ public class Ultimate {
 	public boolean erase(Board board, CellContents player, int row, int col) {
 		Cell cell = board.cells[row][col];
 		if(cell.contents == player || cell.contents == CellContents.EMPTY) {
-			System.out.println("Invalid square, try again!");
+//			System.out.println("Invalid square, try again!");
 			return false;
 		} else {
 //			cell.contents = CellContents.EMPTY;
@@ -187,15 +179,13 @@ public class Ultimate {
 
 	// Switches contents of board from X to O, and from O to X
 	public void switchBoardContents(Board board) {
-		Cell cell;
+//		Cell cell;
 		for (int row = 0; row < ROWS; row++) {
 			for (int col = 0; col < COLS; col++) {
-				cell = board.cells[row][col];
-				if(cell.contents == CellContents.X) {
-					cell.contents = CellContents.O;
-				}
-				if(cell.contents == CellContents.O) {
-					cell.contents = CellContents.X;
+				if(board.cells[row][col].contents == CellContents.X) {
+					board.cells[row][col].contents = CellContents.O;
+				} else if(board.cells[row][col].contents == CellContents.O) {
+					board.cells[row][col].contents = CellContents.X;
 				}
 			}
 		}
@@ -222,114 +212,148 @@ public class Ultimate {
 		player = CellContents.X;
 
 		while(ultimateDisplay.state == GameState.PLAYING) {
-			System.out.println("Current player: " + player);
-			System.out.println("What would you like to do?");
-			System.out.println("\"move\" \"switch\" \"erase\"");
-			System.out.print("> ");
-
-			boolean flag = true;
-			while (flag) {
-				choice = inputScanner.nextLine();
-				if(choice.equalsIgnoreCase("move")) {
-					System.out.println("Where would you like to place your piece? (1-9)");
-					System.out.print("> ");
-					currentMove = Integer.valueOf(inputScanner.nextLine());
-					currentRow = getRow(currentMove);
-					currentColumn = getCol(currentMove);
-
-					if(validateMove(currentBoard, currentMove)) {
-						move(currentBoard, currentMove, player);
-						flag = false;
-					} else {
-						System.out.println("Invalid move, that space is occupied");
-					}
-
-				} else if(choice.equalsIgnoreCase("switch")) {
-					if(((player == CellContents.X && xSwap > 0)
-					|| (player == CellContents.O && oSwap > 0)) && swapCooldown == 0) {
-						switchBoardContents(currentBoard);
-						swapCooldown = 2;
-						if(player == CellContents.X) {
-							xSwap--;
-						} else {
-							oSwap--;
-						}
-						flag = false;
-						hasSwappedThisTurn = true;
-					}
-				} else if(choice.equalsIgnoreCase("erase")) {
-					if(erase(currentBoard, player, currentRow, currentColumn)) {
-						if((player == CellContents.X && xErase > 0)
-								|| (player == CellContents.O && oErase > 0)) {
-							if(player == CellContents.X) {
-								xErase--;
-							} else {
-								oErase--;
-							}
-							currentBoard.cells[currentRow][currentColumn].contents = CellContents.EMPTY;
-							flag = false;
-						}
-
-					} else {
-						System.out.println("The tile is either empty, or your own. Please try again.");
-					}
-				} else {
-					System.out.println("Please enter either \"move\", \"switch\", or \"erase\"");
-				}
-
-			}
-
-			if(checkGameStatus(player, currentMove)) {
+//		while(!checkGameStatus(player, currentMove) || !isDraw()) {
+			try {
+				System.out.println("Current player: " + player);
+				System.out.println("What would you like to do?");
+				System.out.println("\"move\" \"switch\" \"erase\" \"status\"");
 				if(player == CellContents.X) {
-					ultimateDisplay.state = GameState.X_WIN;
-					System.out.println("Congratulations, X wins!");
+					System.out.println("Erases remaining: " + xErase + " Swaps remaining: " + xSwap);
 				} else {
-					ultimateDisplay.state = GameState.O_WIN;
-					System.out.println("Congratulations, O wins!");
+					System.out.println("Erases remaining: " + oErase + " Swaps remaining: " + oSwap);
 				}
-			}
+				if(swapCooldown > 0){
+					System.out.println("Switch will be ready in " + swapCooldown + " turn");
+				}
+				System.out.print("> ");
 
-			if(isDraw()) {
-				ultimateDisplay.state = GameState.DRAW;
-				System.out.println("Game is a draw!");
-			}
+				boolean flag = true;
+				while (flag) {
+					choice = inputScanner.nextLine();
+					if (choice.equalsIgnoreCase("move")) {
+						System.out.println("Where would you like to place your piece? (1-9)");
+						System.out.print("> ");
+						currentMove = Integer.valueOf(inputScanner.nextLine());
+						currentRow = getRow(currentMove);
+						currentColumn = getCol(currentMove);
 
-			if((bigBoard[currentColumn][currentRow].state != GameState.PLAYING) || hasSwappedThisTurn) {
-				boolean isBoardValid = false;
+						if (validateMove(currentBoard, currentMove)) {
+							move(currentBoard, currentMove, player, previousRow, previousColumn);
+							flag = false;
+						} else {
+							System.out.println("Invalid move, that space is occupied");
+						}
 
-				while(!isBoardValid) {
-					printBoardArray();
-					System.out.println("Please choose a valid board (1-9)");
-					newBoard = Integer.valueOf(inputScanner.nextLine());
-					currentBoard = getSpecificBoard(newBoard);
-					if(currentBoard.state == GameState.PLAYING) {
-						isBoardValid = true;
+					} else if (choice.equalsIgnoreCase("switch")) {
+
+						if (((player == CellContents.X && xSwap > 0)
+								|| (player == CellContents.O && oSwap > 0)) && swapCooldown == 0) {
+
+							switchBoardContents(currentBoard);
+							swapCooldown = 2;
+
+							if (player == CellContents.X) {
+								xSwap--;
+							} else {
+								oSwap--;
+							}
+							flag = false;
+							hasSwappedThisTurn = true;
+						}
+					} else if (choice.equalsIgnoreCase("erase")) {
+
+						System.out.println("Which tile would you like to erase?");
+						int erase = Integer.valueOf(inputScanner.nextLine());
+						int eraseRow = getRow(erase);
+						int eraseCol = getCol(erase);
+
+						if (erase(currentBoard, player, eraseRow, eraseCol)) {
+
+							if ((player == CellContents.X && xErase > 0)
+									|| (player == CellContents.O && oErase > 0)) {
+
+								if (player == CellContents.X) {
+									xErase--;
+								} else {
+									oErase--;
+								}
+								currentBoard.cells[eraseRow][eraseCol].contents = CellContents.EMPTY;
+								flag = false;
+							}
+
+						} else {
+							System.out.println("The tile is either empty, or your own. Please try again.");
+						}
+					} else if (choice.equalsIgnoreCase("status")) {
+						printUltimateDisplay();
 					} else {
-						System.out.println("Please choose a valid board that has not been won");
+							System.out.println("Please enter either \"move\", \"switch\", or \"erase\"");
+						}
 					}
-					if(hasSwappedThisTurn) {
-						hasSwappedThisTurn = false;
+
+
+				if (checkGameStatus(player, currentMove)) {
+					if (player == CellContents.X) {
+						ultimateDisplay.state = GameState.X_WIN;
+						System.out.println("Congratulations, X wins!");
+						break;
+					} else {
+						ultimateDisplay.state = GameState.O_WIN;
+						System.out.println("Congratulations, O wins!");
+						break;
 					}
+				} else if (isDraw()) {
+					ultimateDisplay.state = GameState.DRAW;
+					System.out.println("Game is a draw!");
+					break;
+				} else {
+					if ((bigBoard[currentRow][currentColumn].state != GameState.PLAYING) || hasSwappedThisTurn) {
+						boolean isBoardValid = false;
+						printBoardArray();
+						System.out.println("Please choose a valid board (1-9)");
+
+						while (!isBoardValid) {
+							newBoard = Integer.valueOf(inputScanner.nextLine());
+							currentBoard = getSpecificBoard(newBoard);
+							if (currentBoard.state == GameState.PLAYING) {
+								isBoardValid = true;
+								System.out.println("Current Board is Board " + newBoard);
+							} else {
+								System.out.println("Please choose a valid board that has not been won");
+							}
+							if (hasSwappedThisTurn) {
+								hasSwappedThisTurn = false;
+							}
+						}
+
+					} else {
+						currentBoard = getSpecificBoard(currentMove);
+						printBoardArray();
+						System.out.println("Current Board is Board " + currentMove);
+					}
+
+					previousRow = currentRow;
+					previousColumn = currentColumn;
+
+					if (player == CellContents.X) {
+						player = CellContents.O;
+					} else {
+						player = CellContents.X;
+					}
+
+					if (swapCooldown > 0) {
+						swapCooldown--;
+					}
+
+					currentBoard.drawBoard();
 				}
 
-			} else {
-				currentBoard = getSpecificBoard(currentMove);
-				printBoardArray();
+			} catch (NumberFormatException e) {
+//				e.printStackTrace();
+				System.out.println("Please input a number between 1 and 9");
+			} catch (IndexOutOfBoundsException e) {
+//				e.printStackTrace();
 			}
-
-			if(player == CellContents.X) {
-				player = CellContents.O;
-			} else {
-				player = CellContents.X;
-			}
-
-			if(swapCooldown > 0) {
-				swapCooldown--;
-			}
-
-			System.out.println("Current Board is Board " + currentMove);
-			currentBoard.drawBoard();
-
 		}
 	}
 
