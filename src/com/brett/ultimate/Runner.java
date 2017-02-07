@@ -1,6 +1,5 @@
 package com.brett.ultimate;
 
-import com.sun.tools.classfile.ConstantPool;
 
 import java.util.Scanner;
 
